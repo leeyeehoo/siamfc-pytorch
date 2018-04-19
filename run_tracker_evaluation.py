@@ -15,7 +15,7 @@ def main():
     hp, evaluation, run, env, design = parse_arguments()
     final_score_sz = hp.response_up * (design.score_sz - 1) + 1
     siam = SiameseNet(env.root_pretrained, design.net)
-
+    siam.cuda()
     # iterate through all videos of evaluation.dataset
     if evaluation.video == 'all':
         dataset_folder = os.path.join(env.root_dataset, evaluation.dataset)

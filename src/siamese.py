@@ -54,7 +54,7 @@ class SiameseNet(nn.Module):
         self.bn_adjust = nn.BatchNorm2d(1)
         self._initialize_weights()
 
-        self.cuda = torch.cuda.is_available()
+        # self.cuda = torch.cuda.is_available()
         if net is not None:
             net_path = os.path.join(root_pretrained, net)
             if os.path.splitext(net_path)[1] == '.mat':
@@ -107,7 +107,7 @@ class SiameseNet(nn.Module):
         avg_chan = ImageStat.Stat(image).mean
         frame_padded_z, npad_z = pad_frame(image, image.size, pos_x, pos_y, z_sz, avg_chan)
         z_crops = extract_crops_z(frame_padded_z, npad_z, pos_x, pos_y, z_sz, design.exemplar_sz)
-        template_z = self.branch(Variable(z_crops))
+        template_z = self.branch(Variable(z_crops.cuda()))
         return image, template_z
 
     def get_scores(self, pos_x, pos_y, scaled_search_area, template_z, filename,
@@ -116,7 +116,7 @@ class SiameseNet(nn.Module):
         avg_chan = ImageStat.Stat(image).mean
         frame_padded_x, npad_x = pad_frame(image, image.size, pos_x, pos_y, scaled_search_area[2], avg_chan)
         x_crops = extract_crops_x(frame_padded_x, npad_x, pos_x, pos_y, scaled_search_area[0], scaled_search_area[1], scaled_search_area[2], design.search_sz)
-        template_x = self.branch(Variable(x_crops))
+        template_x = self.branch(Variable(x_crops.cuda()))
         template_z = template_z.repeat(template_x.size(0), 1, 1, 1)
         scores = self.xcorr(template_z, template_x)
         scores = self.bn_adjust(scores)
