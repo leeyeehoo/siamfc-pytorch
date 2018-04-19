@@ -119,7 +119,7 @@ def tracker(hp, run, design, frame_name_list, pos_x, pos_y, target_w, target_h, 
                 templates_z_ = (1 - hp.z_lr) * templates_z_ + hp.z_lr * new_templates_z_
             
             # update template patch size
-            z_sz = (1 - hp.scale_lr) * z_sz + hp.scale_lr * scaled_exemplar[new_scale_id]
+            # z_sz = (1 - hp.scale_lr) * z_sz + hp.scale_lr * scaled_exemplar[new_scale_id]
             
             if run.visualization:
                 show_frame(image_, bboxes[i,:], 1)
